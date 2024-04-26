@@ -4,16 +4,16 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
-#include "MyCharacter.generated.h"
+#include "TestCharacter.generated.h"
 
 UCLASS()
-class TFG_API AMyCharacter : public ACharacter
+class TFG_API ATestCharacter : public ACharacter
 {
 	GENERATED_BODY()
 
 public:
 	// Sets default values for this character's properties
-	AMyCharacter();
+	ATestCharacter();
 
 protected:
 	// Called when the game starts or when spawned
@@ -26,4 +26,9 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+public:
+	UFUNCTION(BlueprintCallable)
+		void ThrowRaycast();
+
+	
 };
