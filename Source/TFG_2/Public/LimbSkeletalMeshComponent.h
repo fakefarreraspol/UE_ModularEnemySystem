@@ -29,7 +29,4 @@ public:
 	UPROPERTY(BlueprintAssignable, Category = "Events")
 		FOnComponentDestroyed OnComponentDestroyedEvent;
 
-
-
-
 };
