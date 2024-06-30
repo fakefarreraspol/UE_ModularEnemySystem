@@ -97,6 +97,11 @@ void AEnemyCharacter::AddLimb(FVector Location)
         SpiderLegs.Add(NewSkeletalMeshComponent);
         PhysConstraints.Add(physComponent);
 
+
+        UPhyAnimActorComponent* phyanim = Cast<UPhyAnimActorComponent>(AddComponentByClass(physActorComp, false, LocationTransform, false));
+        physAnimations.Add(phyanim);
+
+        phyanim->OnStart(NewSkeletalMeshComponent);
         //increase hp by leg number
         hp += 100;
         maxHP = hp;
@@ -144,7 +149,9 @@ void AEnemyCharacter::OnSpiderLimbDestroyed(ULimbSkeletalMeshComponent* Destroye
         UE_LOG(LogTemp, Warning, TEXT("Constraint component has been destroyed %s"), *PhysConstraints[Index]->GetName());
         PhysConstraints[Index]->DestroyComponent();
         PhysConstraints.RemoveAt(Index);
-
+        
+        physAnimations[Index]->OnDestroyed();
+        physAnimations.RemoveAt(Index);
         ReceiveDamage(200);
 
         OnLegRemoved();
@@ -203,6 +210,19 @@ void AEnemyCharacter::ReceiveDamage(int32 damage)
             
             //constraint->DestroyComponent();
             
+        }
+    }
+}
+
+void AEnemyCharacter::OnLegHit(ULimbSkeletalMeshComponent* leg, FHitResult hitres)
+{
+    int32 index = SpiderLegs.Find(leg);
+    UE_LOG(LogTemp, Warning, TEXT("found at %i"), index);
+    if (CanBeDamaged() && index >= 0 && hp > 0)
+    {
+        if (SpiderLegs[index] != nullptr)
+        {
+            physAnimations[index]->LimbHit(hitres);
         }
     }
 }

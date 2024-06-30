@@ -13,6 +13,9 @@
 
 #include "NiagaraSystem.h"
 #include "NiagaraComponent.h"
+#include "Components/ActorComponent.h"
+
+#include "PhyAnimActorComponent.h"
 
 #include "EnemyCharacter.generated.h"
 
@@ -43,6 +46,9 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category = "Skeletal Mesh")
 		TSubclassOf<ULimbSkeletalMeshComponent> meshAsset;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Physical Animation")
+		TSubclassOf<UPhyAnimActorComponent> physActorComp;
+
 	void AddLimb(FVector Location);
 	UFUNCTION()
 		void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
@@ -56,6 +62,11 @@ public:
 	UFUNCTION(BlueprintImplementableEvent, Category = "BaseCharacter", BlueprintCallable)
 		void ActivateEnemy();
 
+	//UFUNCTION(BlueprintImplementableEvent, Category = "BaseCharacter", BlueprintCallable)
+		//void OnLegHit(ULimbSkeletalMeshComponent* HitComponent, );
+	UFUNCTION(BlueprintCallable)
+		void OnLegHit(ULimbSkeletalMeshComponent* leg, FHitResult hitres);
+
 	UFUNCTION(BlueprintImplementableEvent, Category = "BaseCharacter", BlueprintCallable)
 		void OnLegRemoved();
 
@@ -68,7 +79,8 @@ public:
 	UPROPERTY(BlueprintReadWrite, Category = "EnemyModular")
 		TArray<UPhysicsConstraintComponent*> PhysConstraints;
 
-	
+	UPROPERTY(BlueprintReadWrite, Category = "EnemyModular")
+		TArray<UPhyAnimActorComponent*> physAnimations;
 	
 public: 
 	UPROPERTY(BlueprintReadWrite, Category = "EnemyModular")
